@@ -12,8 +12,15 @@ void setup() {
 void loop() {
   // print a random number from 0 to 299
   randNumber = random(300);
-  Serial.println(randNumber);  
-
+  Serial.println(randNumber);
+  if (randNumber > 150)
+  {
+    Serial.println("You definetly have cts");
+  }
+  else
+  {
+    Serial.println("You probably dont have cts");
+  }
   // print a random number from 10 to 19
   randNumber = random(10, 20);
   Serial.println(randNumber);
