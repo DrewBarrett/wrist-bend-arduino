@@ -121,6 +121,10 @@ MPU6050 mpu;
 #define LED_PIN 13 // (Arduino is 13, Teensy is 11, Teensy++ is 6)
 bool blinkState = false;
 
+
+const int flexpin = 0; 
+
+
 // MPU control/status vars
 bool dmpReady = false;  // set true if DMP init was successful
 uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
@@ -243,6 +247,27 @@ void setup() {
 void loop() {
     // if programming failed, don't try to do anything
     if (!dmpReady) return;
+  int flexposition;    // Input value from the analog pin.
+  int servoposition;   // Output value to the servo.
+
+  // Read the position of the flex sensor (0 to 1023):
+
+  flexposition = analogRead(flexpin);
+
+  // Because the voltage divider circuit only returns a portion
+  // of the 0-1023 range of analogRead(), we'll map() that range
+  // to the servo's range of 0 to 180 degrees. The flex sensors
+  // we use are usually in the 600-900 range:
+
+  // Now we'll command the servo to move to that position:
+
+  // Because every flex sensor has a slightly different resistance,
+  // the 600-900 range may not exactly cover the flex sensor's
+  // output. To help tune our program, we'll use the serial port to
+  // print out our values to the serial monitor window:
+
+  Serial.print("sensor: ");
+  Serial.println(flexposition);
 
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) {
