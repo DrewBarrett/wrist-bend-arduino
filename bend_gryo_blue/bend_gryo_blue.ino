@@ -125,6 +125,7 @@ bool blinkState = false;
 
 
 const int flexpin = 0; 
+char commandChar;
 
 
 // MPU control/status vars
@@ -182,7 +183,7 @@ void setup() {
     // (115200 chosen because it is required for Teapot Demo output, but it's
     // really up to you depending on your project)
     Serial.begin(115200);
-    blue.begin(115200)
+    blue.begin(115200);
     while (!Serial); // wait for Leonardo enumeration, others continue immediately
 
     // NOTE: 8MHz or slower host processors, like the Teensy @ 3.3v or Ardunio
@@ -273,7 +274,16 @@ void loop() {
   // the 600-900 range may not exactly cover the flex sensor's
   // output. To help tune our program, we'll use the serial port to
   // print out our values to the serial monitor window:
-
+  if(blue.available())
+  {
+    commandChar = blue.read();
+    switch(commandChar)
+    {
+      case '*':
+      blue.print(flexposition + "#");
+      break;
+    }
+  }
   Serial.print("sensor: ");
   Serial.println(flexposition);
   blue.print("sensor: ");
