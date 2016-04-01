@@ -147,6 +147,7 @@ float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gra
 
 const int RX_PIN = 0;
 const int TX_PIN = 1;
+//these dont matter anymore but devices tx must conect to arudinos rx
 //SoftwareSerial blue(RX_PIN, TX_PIN);
 
 
