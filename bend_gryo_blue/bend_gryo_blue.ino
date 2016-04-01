@@ -147,7 +147,7 @@ float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gra
 
 const int RX_PIN = 0;
 const int TX_PIN = 1;
-SoftwareSerial blue(RX_PIN, TX_PIN);
+//SoftwareSerial blue(RX_PIN, TX_PIN);
 
 
 // packet structure for InvenSense teapot demo
@@ -182,8 +182,8 @@ void setup() {
     // initialize serial communication
     // (115200 chosen because it is required for Teapot Demo output, but it's
     // really up to you depending on your project)
-    Serial.begin(115200);
-    blue.begin(115200);
+    Serial.begin(9600);
+//blue.begin(9600);
     while (!Serial); // wait for Leonardo enumeration, others continue immediately
 
     // NOTE: 8MHz or slower host processors, like the Teensy @ 3.3v or Ardunio
@@ -280,14 +280,15 @@ void loop() {
     switch(commandChar)
     {
       case '*':
-      blue.print(flexposition + "#");
+     // blue.print(flexposition + "#");
+      Serial.print(flexposition + "#"):
       break;
     }
   }
   Serial.print("sensor: ");
   Serial.println(flexposition);
-  blue.print("sensor: ");
-  blue.println(flexposition);
+  //blue.print("sensor: ");
+  //blue.println(flexposition);
 
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) {
