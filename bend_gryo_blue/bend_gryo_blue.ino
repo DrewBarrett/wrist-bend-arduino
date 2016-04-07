@@ -203,9 +203,9 @@ void setup() {
 
     // wait for ready
     Serial.println(F("\nSend any character to begin DMP programming and demo: #"));
-    while (Serial.available() && Serial.read()); // empty buffer
-    while (!Serial.available());                 // wait for data
-    while (Serial.available() && Serial.read()); // empty buffer again
+    //while (Serial.available() && Serial.read()); // empty buffer
+  //  while (!Serial.available());                 // wait for data
+//    while (Serial.available() && Serial.read()); // empty buffer again
 
     // load and configure the DMP
     Serial.println(F("Initializing DMP...#"));
@@ -275,14 +275,14 @@ void loop() {
   // the 600-900 range may not exactly cover the flex sensor's
   // output. To help tune our program, we'll use the serial port to
   // print out our values to the serial monitor window:
-  if(blue.available())
+  if(Serial.available())
   {
-    commandChar = blue.read();
+    commandChar = Serial.read();
     switch(commandChar)
     {
       case '*':
      // blue.print(flexposition + "#");
-      Serial.print(flexposition + "#"):
+      Serial.print(flexposition + "#");
       break;
     }
   }
@@ -340,7 +340,8 @@ void loop() {
             Serial.print("\t");
             Serial.print(q.y);
             Serial.print("\t");
-            Serial.println(q.z);
+            Serial.print(q.z);
+            Serial.println("#");
         #endif
 
         #ifdef OUTPUT_READABLE_EULER
@@ -352,7 +353,8 @@ void loop() {
             Serial.print("\t");
             Serial.print(euler[1] * 180/M_PI);
             Serial.print("\t");
-            Serial.println(euler[2] * 180/M_PI);
+            Serial.print(euler[2] * 180/M_PI);
+            Serial.println("#");
         #endif
 
         #ifdef OUTPUT_READABLE_YAWPITCHROLL
@@ -365,7 +367,8 @@ void loop() {
             Serial.print("\t");
             Serial.print(ypr[1] * 180/M_PI);
             Serial.print("\t");
-            Serial.println(ypr[2] * 180/M_PI);
+            Serial.print(ypr[2] * 180/M_PI);
+            Serial.println("#");
         #endif
 
         #ifdef OUTPUT_READABLE_REALACCEL
@@ -379,7 +382,8 @@ void loop() {
             Serial.print("\t");
             Serial.print(aaReal.y);
             Serial.print("\t");
-            Serial.println(aaReal.z);
+            Serial.print(aaReal.z);
+            Serial.println("#");
         #endif
 
         #ifdef OUTPUT_READABLE_WORLDACCEL
@@ -395,7 +399,8 @@ void loop() {
             Serial.print("\t");
             Serial.print(aaWorld.y);
             Serial.print("\t");
-            Serial.println(aaWorld.z);
+            Serial.print(aaWorld.z);
+            Serial.println("#");
         #endif
     
         #ifdef OUTPUT_TEAPOT
