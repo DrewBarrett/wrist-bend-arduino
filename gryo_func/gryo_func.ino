@@ -314,10 +314,14 @@ void loop() {
     // otherwise, check for DMP data ready interrupt (this should happen frequently)
     } else if (mpuIntStatus & 0x02) {
         // wait for correct available data length, should be a VERY short wait
+        int loopcount = 0;
         while (fifoCount < packetSize) {
-          fifoCount = mpu.getFIFOCount(); 
-          Serial.println("Waiting..."); 
+          fifoCount = mpu.getFIFOCount();
+          loopcount++;
+          Serial.print(loopcount);
+          Serial.println(" Waiting..."); 
         }
+       
 
         // read a packet from FIFO
         mpu.getFIFOBytes(fifoBuffer, packetSize);
