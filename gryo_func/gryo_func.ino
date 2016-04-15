@@ -257,7 +257,7 @@ void setup() {
 
 void loop() {
     // if programming failed, don't try to do anything
-    if (!dmpReady) return;
+  if (!dmpReady) return;
   int flexposition;    // Input value from the analog pin.
   //int servoposition;   // Output value to the servo.
 
@@ -266,25 +266,27 @@ void loop() {
   
 
   
-  if(Serial.available())
-  {
-    commandChar = Serial.read();
-    switch(commandChar)
-    {
-      case '*':
-            flexposition = analogRead(flexpin);
-            Serial.print("sensor: ");
-            Serial.println(flexposition + "#");
-      break;
-    }
-  }
+  
   
   //blue.print("sensor: ");
   //blue.println(flexposition);
   
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) {
-        // other program behavior stuff here
+      /*if(Serial.available())
+      {
+        commandChar = Serial.read();
+        switch(commandChar)
+        {
+          case '*':
+                flexposition = analogRead(flexpin);
+                Serial.print("sensor: ");
+                Serial.print(flexposition);
+                Serial.println("#");
+          break;
+        }
+      } */ 
+      // other program behavior stuff here
         // .
         // .
         // .
@@ -358,7 +360,10 @@ void loop() {
             Serial.print("\t");
             Serial.print(ypr[1] * 180/M_PI);
             Serial.print("\t");
-            Serial.print(ypr[2] * 180/M_PI);
+            Serial.println(ypr[2] * 180/M_PI);
+            flexposition = analogRead(flexpin);
+            Serial.print("sensor: ");
+            Serial.print(flexposition);
             Serial.println("#");
             
         #endif
