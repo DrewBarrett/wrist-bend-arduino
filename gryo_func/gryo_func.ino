@@ -147,6 +147,9 @@ float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gra
 
 const int RX_PIN = 0;
 const int TX_PIN = 1;
+
+int loopcount = 0;
+int flexposition; 
 //these dont matter anymore but devices tx must conect to arudinos rx
 //SoftwareSerial blue(RX_PIN, TX_PIN);
 
@@ -257,8 +260,13 @@ void setup() {
 
 void loop() {
     // if programming failed, don't try to do anything
-  if (!dmpReady) return;
-  int flexposition;    // Input value from the analog pin.
+  Serial.println("Starting loop");
+  if (!dmpReady){
+    Serial.print("dmp failed stopping loop");
+    return;
+  }
+  Serial.println("Dmp passed");
+     // Input value from the analog pin.
   //int servoposition;   // Output value to the servo.
 
   // Read the position of the flex sensor (0 to 1023):
@@ -270,7 +278,7 @@ void loop() {
   
   //blue.print("sensor: ");
   //blue.println(flexposition);
-  
+  Serial.println("checking mpuInterrupt");
     // wait for MPU interrupt or extra packet(s) available
     while (!mpuInterrupt && fifoCount < packetSize) {
       /*if(Serial.available())
@@ -286,6 +294,10 @@ void loop() {
           break;
         }
       } */ 
+      Serial.print(mpuInterrupt);
+      Serial.print(fifoCount);
+      Serial.println("No MPU interrupt... waiting...");
+      setup();
       // other program behavior stuff here
         // .
         // .
@@ -297,24 +309,25 @@ void loop() {
         // .
         // .
     }
-
+    Serial.println("passed mpuInterrupt");
     // reset interrupt flag and get INT_STATUS byte
     mpuInterrupt = false;
+    Serial.println("Set mpuInterrupt to false");
     mpuIntStatus = mpu.getIntStatus();
-
+    Serial.println("retrieved mpuIntStatus");
     // get current FIFO count
     fifoCount = mpu.getFIFOCount();
-
+    Serial.println("Checking Overflow");
     // check for overflow (this should never happen unless our code is too inefficient)
     if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
         // reset so we can continue cleanly
-        mpu.resetFIFO();
         Serial.println(F("FIFO overflow!"));
+        mpu.resetFIFO();
 
     // otherwise, check for DMP data ready interrupt (this should happen frequently)
     } else if (mpuIntStatus & 0x02) {
         // wait for correct available data length, should be a VERY short wait
-        int loopcount = 0;
+        Serial.println("data interrupted");
         while (fifoCount < packetSize) {
           fifoCount = mpu.getFIFOCount();
           loopcount++;
@@ -362,16 +375,17 @@ void loop() {
             mpu.dmpGetQuaternion(&q, fifoBuffer);
             mpu.dmpGetGravity(&gravity, &q);
             mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-            Serial.print("ypr\t");
+            Serial.print("ypr*");
             Serial.print(ypr[0] * 180/M_PI);
-            Serial.print("\t");
+            Serial.print("$");
             Serial.print(ypr[1] * 180/M_PI);
-            Serial.print("\t");
-            Serial.println(ypr[2] * 180/M_PI);
+            Serial.print("@");
+            Serial.print(ypr[2] * 180/M_PI);
+            Serial.print("#");
             flexposition = analogRead(flexpin);
-            Serial.print("sensor: ");
+            Serial.print("sensor: &");
             Serial.print(flexposition);
-            Serial.println("#");
+            Serial.println("&");
             
         #endif
 
@@ -426,4 +440,5 @@ void loop() {
         digitalWrite(LED_PIN, blinkState);
         
     }
+    Serial.println("Finish loop");
 }
